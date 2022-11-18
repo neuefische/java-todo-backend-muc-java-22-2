@@ -37,13 +37,22 @@ export default function TodoApp() {
             })
     }
 
+    function deleteTodo(todoIdToDelete: string) {
+        axios.delete("/api/todo/" + todoIdToDelete).then(
+            () => {
+                const updatedTodoList = allTodos.filter((todo) => todo.id !== todoIdToDelete)
+                setAllTodos(updatedTodoList)
+            }
+        )
+    }
+
     const filteredTodos = allTodos.filter(todo => todo.description.toLowerCase().includes(descriptionSearchQuery?.toLowerCase()))
 
     return (
         <div>
             <h1>Beste Todo App wo geht</h1>
             <Search handleSearchChange={handleSearchChange}/>
-            <TodoList todos={filteredTodos}/>
+            <TodoList todos={filteredTodos} handleFinishTodo={deleteTodo}/>
             <AddTodo handleAddTodo={addTodo} />
         </div>
     );
