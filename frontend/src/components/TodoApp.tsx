@@ -17,6 +17,7 @@ export default function TodoApp() {
 
     return (
         <div>
+            <h1>Beste Todo App wo geht</h1>
             <TodoList todos={filteredTodos} />
         </div>
     );
