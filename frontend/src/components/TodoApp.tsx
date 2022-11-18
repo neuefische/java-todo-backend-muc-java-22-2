@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import "./TodoApp.css"
 import TodoList from "./TodoList";
 import axios from "axios";
 import {Todo} from "../model/Todo";
@@ -49,8 +50,8 @@ export default function TodoApp() {
     const filteredTodos = allTodos.filter(todo => todo.description.toLowerCase().includes(descriptionSearchQuery?.toLowerCase()))
 
     return (
-        <div>
-            <h1>Beste Todo App wo geht</h1>
+        <div className={"TodoApp"}>
+            <h1 >Beste Todo App wo geht</h1>
             <Search handleSearchChange={handleSearchChange}/>
             <TodoList todos={filteredTodos} handleFinishTodo={deleteTodo}/>
             <AddTodo handleAddTodo={addTodo} />

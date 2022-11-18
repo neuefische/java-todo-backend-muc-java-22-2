@@ -1,4 +1,4 @@
-import {ChangeEvent, ChangeEventHandler} from "react";
+import {ChangeEvent} from "react";
 
 type SearchProps = {
     handleSearchChange(searchQuery: string): void
@@ -12,7 +12,7 @@ export default function Search(props: SearchProps) {
 
     return(
         <section>
-            <input onChange={handleSearchChange} />
+            Suchen: <input onChange={handleSearchChange} />
         </section>
     )
 }
