@@ -38,6 +38,24 @@ export default function TodoApp() {
             })
     }
 
+    function handleUpdateTodo(newTodo: Todo) {
+        axios.put("/api/todo/" + newTodo.id, newTodo)
+            .then((updatedTodoResponse) => {
+                setAllTodos((prevTodos) => {
+                        const updatedTodo: Todo = updatedTodoResponse.data
+
+                        return prevTodos.map((todo) => {
+                            if (todo.id === updatedTodo.id) {
+                                return updatedTodo
+                            } else {
+                                return todo
+                            }
+                        })
+                    }
+                )
+            })
+    }
+
     function deleteTodo(todoIdToDelete: string) {
         axios.delete("/api/todo/" + todoIdToDelete).then(
             () => {
@@ -51,10 +69,10 @@ export default function TodoApp() {
 
     return (
         <div className={"TodoApp"}>
-            <h1 >Beste Todo App wo geht</h1>
+            <h1>Beste Todo App wo geht</h1>
             <Search handleSearchChange={handleSearchChange}/>
-            <TodoList todos={filteredTodos} handleFinishTodo={deleteTodo}/>
-            <AddTodo handleAddTodo={addTodo} />
+            <TodoList todos={filteredTodos} handleUpdateTodo={handleUpdateTodo} handleFinishTodo={deleteTodo}/>
+            <AddTodo handleAddTodo={addTodo}/>
         </div>
     );
 }
