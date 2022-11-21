@@ -44,26 +44,35 @@ export default function TodoApp() {
     function addTodo(newTodoWithoutId: Todo) {
         axios.post(todoBaseUrl, newTodoWithoutId)
             // Statuscode = Erfolgreich
-            .then(newTodoResponse => {
-                // Wir aktualisieren den "todoList" State und nutzen dafür den vorherigen State mittels
-                // "prev" (= previous) + <stateName>
-                // = prevTodoList
-                setTodos(prevTodoList => {
-                    // Hier nutzen wir den "Spread Operator" = "..."
-                    // https://stackoverflow.com/a/37002941
-
-                    // Was passiert: mit den drei Punkten kopieren wir alles aus dem "prevTodos" Array
-                    // und fügen das neue Element zur Liste hinzu
-                    // mit return geben wir die neu erstellte Liste (alte Liste + neues Element) zurück
-                    return [...prevTodoList, newTodoResponse.data]
-                })
-            })
+            // Auf Antwort reagieren
+            .then(newTodoResponse => addNewTodoToList(newTodoResponse.data))
             // Fehlercode
             .catch(errorMessageResponse => {
                 console.log("ALARM! Es gab einen Fehler beim POST: " + errorMessageResponse)
             })
-
     }
+
+    function addNewTodoToList(newTodo: Todo) {
+        // Wir aktualisieren den "todoList" State und nutzen dafür den vorherigen State mittels
+        // "prev" (= previous) + <stateName>
+        // = prevTodoList
+        setTodos(prevTodoList => {
+            // Hier nutzen wir den "Spread Operator" = "..."
+            // https://stackoverflow.com/a/37002941
+
+            // Was passiert: mit den drei Punkten kopieren wir alles aus dem "prevTodos" Array
+            // und fügen das neue Element zur Liste hinzu
+            // mit return geben wir die neu erstellte Liste (alte Liste + neues Element) zurück
+
+            // Was bei den Pünktchen unter der Haube passiert:
+            // const newTodoList: Todo[] = []
+            // for (const todo of prevTodoList) {
+            //     newTodoList.push(todo)
+            // }
+            return [...prevTodoList, newTodo]
+        })
+    }
+
 
     return (
         <section>
