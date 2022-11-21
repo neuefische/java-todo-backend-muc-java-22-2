@@ -4,6 +4,7 @@ import axios from "axios";
 import {Todo} from "../models/Todo";
 import {useEffect, useState} from "react";
 import AddTodo from "./AddTodo";
+import Search from "./Search";
 
 export default function TodoApp() {
 
@@ -15,6 +16,7 @@ export default function TodoApp() {
     // todos = Daten
     // setTodos = Funktionen um die Daten zu ändern
     const [todos, setTodos] = useState<Todo []>([])
+    const [searchQuery, setSearchQuery] = useState<string>("")
 
     // Eine Funktion um "Seiteneffekte" zu verarbeiten
     // Wir nutzen useEffect um eine Endlosschleife zu vermeiden
@@ -73,11 +75,20 @@ export default function TodoApp() {
         })
     }
 
+    function updateSearchQuery(newSearchQuery: string) {
+        setSearchQuery(newSearchQuery)
+    }
+
+    // Suche alle Todos, die in der Beschreibung den Suchbegriffen haben
+    // Groß- und Kleinschreibung soll ignoriert werden via ".toLowerCase()"
+    const filteredTodos = todos
+        .filter(todo => todo.description.toLowerCase().includes(searchQuery.toLowerCase()))
 
     return (
         <section>
             <h1>Beste Todo App wo geht</h1>
-            <TodoList todosToMap={todos}/>
+            <Search handleSearchQueryChange={updateSearchQuery} />
+            <TodoList todosToMap={filteredTodos}/>
             <AddTodo handleAddTodo={addTodo}/>
         </section>
     )
