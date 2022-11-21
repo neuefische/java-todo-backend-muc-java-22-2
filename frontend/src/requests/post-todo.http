@@ -1,0 +1,7 @@
+POST localhost:8080/api/todo
+Content-Type: application/json
+
+{
+    "description": "Sachen packen",
+    "status": "OPEN"
+}

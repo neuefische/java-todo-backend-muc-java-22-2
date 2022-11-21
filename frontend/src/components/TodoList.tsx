@@ -10,7 +10,7 @@ type TodoListProps = {
 export default function TodoList(props: TodoListProps ) {
 
     const todoItemComponents = props.todosToMap.map(todoData => {
-        return <TodoItem todoToDisplay={todoData} />
+        return <TodoItem todoToDisplay={todoData} key={todoData.id} />
     })
 
     return (
