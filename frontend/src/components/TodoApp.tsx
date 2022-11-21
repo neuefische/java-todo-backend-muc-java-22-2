@@ -8,7 +8,7 @@ import Search from "./Search";
 
 export default function TodoApp() {
 
-    const todoBaseUrl = "/api/todo";
+    const todoBaseUrl = "/api/todo/";
     // Was ist ein State?
     // React Mechanismus, um Daten zu aktualisieren,
     // wenn diese sich ändern, wird neu gerendert
@@ -39,7 +39,7 @@ export default function TodoApp() {
             })
             // ... und wenn's schief läuft...?
             .catch(errorMessageResponse => {
-                console.log("ALARM! Es gab einen Fehler beim GET: " + errorMessageResponse)
+                console.error("ALARM! Es gab einen Fehler beim GET: " + errorMessageResponse)
             })
     }
 
@@ -50,7 +50,7 @@ export default function TodoApp() {
             .then(newTodoResponse => addNewTodoToList(newTodoResponse.data))
             // Fehlercode
             .catch(errorMessageResponse => {
-                console.log("ALARM! Es gab einen Fehler beim POST: " + errorMessageResponse)
+                console.error("ALARM! Es gab einen Fehler beim POST: " + errorMessageResponse)
             })
     }
 
@@ -75,6 +75,39 @@ export default function TodoApp() {
         })
     }
 
+    function handleUpdateTodo(newTodo: Todo) {
+        axios.put(todoBaseUrl + newTodo.id, newTodo)
+            .then((updatedTodoResponse) => {
+                setTodos((prevTodos) => {
+                        const updatedTodo: Todo = updatedTodoResponse.data
+
+                        return prevTodos.map((todo) => {
+                            if (todo.id === updatedTodo.id) {
+                                return updatedTodo
+                            } else {
+                                return todo
+                            }
+                        })
+                    }
+                )
+            })
+            .catch(errorMessageResponse => {
+                console.error("ALARM! Es gab einen Fehler beim PUT: " + errorMessageResponse)
+            })
+    }
+
+    function deleteTodo(todoIdToDelete: string) {
+        axios.delete(todoBaseUrl + todoIdToDelete).then(
+            () => {
+                const updatedTodoList = todos.filter((todo) => todo.id !== todoIdToDelete)
+                setTodos(updatedTodoList)
+            }
+        )
+        .catch(errorMessageResponse => {
+                console.error("ALARM! Es gab einen Fehler beim DELETE: " + errorMessageResponse)
+        })
+    }
+
     function updateSearchQuery(newSearchQuery: string) {
         setSearchQuery(newSearchQuery)
     }
@@ -87,8 +120,8 @@ export default function TodoApp() {
     return (
         <section>
             <h1>Beste Todo App wo geht</h1>
-            <Search handleSearchQueryChange={updateSearchQuery} />
-            <TodoList todosToMap={filteredTodos}/>
+            <Search handleSearchQueryChange={updateSearchQuery}/>
+            <TodoList todosToMap={filteredTodos} handleUpdateTodo={handleUpdateTodo} handleFinishTodo={deleteTodo}/>
             <AddTodo handleAddTodo={addTodo}/>
         </section>
     )
