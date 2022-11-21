@@ -2,7 +2,7 @@
 import TodoList from "./TodoList";
 import axios from "axios";
 import {Todo} from "../models/Todo";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 export default function TodoApp() {
 
@@ -15,7 +15,15 @@ export default function TodoApp() {
     // setTodos = Funktionen um die Daten zu ändern
     const [todos, setTodos] = useState<Todo []>([])
 
+    // Eine Funktion um "Seiteneffekte" zu verarbeiten
+    // Wir nutzen useEffect um eine Endlosschleife zu vermeiden
+    useEffect(() => {
+        getTodos()
+        // [] : useEffect wird beim ERSTEN Laden der Komponente aufgerufen
+    }, [])
+
     function getTodos() {
+        console.log("...Lese Todos vom Backend")
         // get weil HTTP GET
         // Eine Anfrage ist asynchron
         // Um auf die Antwort zu antworten SOBALD sie da ist,
@@ -27,8 +35,8 @@ export default function TodoApp() {
                 setTodos(newTodoList)
             })
             // ... und wenn's schief läuft...?
-            .catch(errorResponse => {
-                console.log("ALARM! Es gab einen Fehler beim GET: " + errorResponse)
+            .catch(errorMessageResponse => {
+                console.log("ALARM! Es gab einen Fehler beim GET: " + errorMessageResponse)
             })
     }
 
