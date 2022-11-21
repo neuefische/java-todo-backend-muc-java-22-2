@@ -3,6 +3,7 @@ import TodoList from "./TodoList";
 import axios from "axios";
 import {Todo} from "../models/Todo";
 import {useEffect, useState} from "react";
+import AddTodo from "./AddTodo";
 
 export default function TodoApp() {
 
@@ -40,10 +41,19 @@ export default function TodoApp() {
             })
     }
 
+    function addTodo(newTodoWithoutId: Todo) {
+        axios.post(todoBaseUrl, newTodoWithoutId)
+            .then(newTodoResponse => {
+                // 3. Das neue Todo MIT der ID in der Liste speichern
+                console.log("Early Christmas! Neues TODO: " + newTodoResponse.data)
+            })
+    }
+
     return (
         <section>
             <h1>Beste Todo App wo geht</h1>
             <TodoList todosToMap={todos}/>
+            <AddTodo handleAddTodo={addTodo}/>
         </section>
     )
 }
