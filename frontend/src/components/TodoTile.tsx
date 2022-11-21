@@ -18,12 +18,20 @@ export default function TodoTile(props: TodoTileProps) {
             description: description,
             status: props.todo.status
         }
+
         props.handleUpdateTodo(newTodo)
     }
 
     function handleFinishTodo() {
+        // Alternative zu dem unteren:
+        // props.handleFinishTodo(props.todo.id!)
         // Ausrufezeichen heißt "Yo, die id GIBT es WIRKLICH!"
-        props.handleFinishTodo(props.todo.id!)
+
+        if(props.todo.id) {
+            props.handleFinishTodo(props.todo.id)
+        } else {
+            console.error("Die ID die du löschen möchtest, gibt es nicht!")
+        }
     }
 
     return (

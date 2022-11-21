@@ -40,7 +40,9 @@ export default function TodoApp() {
 
     function handleUpdateTodo(newTodo: Todo) {
         axios.put("/api/todo/" + newTodo.id, newTodo)
+            // Auf Antwort reagieren
             .then((updatedTodoResponse) => {
+                // Todo Liste aktualisieren - nehmen dafür die alte Liste (prevTodos)
                 setAllTodos((prevTodos) => {
                         const updatedTodo: Todo = updatedTodoResponse.data
 
@@ -57,12 +59,12 @@ export default function TodoApp() {
     }
 
     function deleteTodo(todoIdToDelete: string) {
-        axios.delete("/api/todo/" + todoIdToDelete).then(
-            () => {
-                const updatedTodoList = allTodos.filter((todo) => todo.id !== todoIdToDelete)
-                setAllTodos(updatedTodoList)
-            }
-        )
+        axios.delete("/api/todo/" + todoIdToDelete)
+            .then(() => {
+                    const updatedTodoList = allTodos.filter((todo) => todo.id !== todoIdToDelete)
+                    setAllTodos(updatedTodoList)
+                }
+            )
     }
 
     const filteredTodos = allTodos.filter(todo => todo.description.toLowerCase().includes(descriptionSearchQuery?.toLowerCase()))
